@@ -31,6 +31,7 @@ axiosInstance.interceptors.response.use(
         // Check if it's a 401 Unauthorized error (invalid or expired token)
         if (error.response && (error.response.status === 401 || error.response.status === 403 )) {
             // Clear the token and refresh token from localStorage
+            console.log("YES");
             localStorage.removeItem('token');
             localStorage.removeItem('refreshToken');
 

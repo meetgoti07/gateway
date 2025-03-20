@@ -5,7 +5,8 @@ import { Input } from "@/components/ui/input"; // Shadcn Input component
 import { Button } from "@/components/ui/button"; // Shadcn Button component
 import { Label } from "@/components/ui/label"; // Shadcn Label component
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import axiosInstance from "@/api/axiosInstance.ts"; // Shadcn Card components
+import axiosInstance from "@/api/axiosInstance.ts";
+import {useNavigate} from "react-router-dom"; // Shadcn Card components
 
 // Define Zod Schema for Validation
 const formSchema = z.object({
@@ -34,6 +35,7 @@ const formSchema = z.object({
 type MerchantFormData = z.infer<typeof formSchema>;
 
 export default function MerchantOnboarding() {
+    const navigate = useNavigate();
     // 1. Initialize react-hook-form
     const form = useForm<MerchantFormData>({
         resolver: zodResolver(formSchema),
@@ -65,8 +67,9 @@ export default function MerchantOnboarding() {
     const onSubmit = async (data: MerchantFormData) => {
         console.log(data); // Do something with form data (like sending it to an API)
         const response = await axiosInstance.post("/merchant/register", data);
-
-        console.log(response.data); // Log the response from the API
+        if(response) {
+            navigate("/dashboard");
+        }
     };
 
     return (

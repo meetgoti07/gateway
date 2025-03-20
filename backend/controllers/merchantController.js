@@ -3,6 +3,11 @@ import Merchant from '../models/merchantModel.js';
 import {json} from "express";
 import {MerchantAPIKey} from "../models/merchantAPIKey.js";
 import crypto from "crypto";
+import {Refund} from "../models/refundSchema.js";
+import {Settlement} from "../models/settlementSchema.js";
+import {Transaction} from "../models/transactionModel.js";
+import {EscrowAccount} from "../models/escrowModel.js";
+
 
 // Update Merchant Details (After Registration)
 const registerMerchant = async (req, res) => {
@@ -32,6 +37,7 @@ const registerMerchant = async (req, res) => {
         // Step 1: Find the Merchant by email (email is unique)
         const merchant = await Merchant.findOne({ email: req.body.email });
         if (!merchant) {
+
             return res.status(404).json({ message: 'Merchant not found' });
         }
 
@@ -73,7 +79,7 @@ const getMerchantByEmail = async (req, res) => {
         const { email } = req.params;
 
         // Fetch merchant from database
-        const merchant = await Merchant.findOne({ email }).populate('auth');
+        const merchant = await Merchant.findOne({ email:email });
 
         if (!merchant) {
             return res.status(404).json({ message: 'Merchant not found' });
@@ -93,7 +99,7 @@ const getMeMerchant = async (req, res) => {
         const userId = req.user; // Assuming the decoded token contains the user id
 
         // Fetch the merchant based on the user ID from the token
-        const merchant = await Merchant.findOne({ auth: userId }).populate('auth');
+        const merchant = await Merchant.findOne({ auth: userId });
 
         if (!merchant) {
             return res.status(404).json({ message: 'Merchant not found' });
@@ -160,4 +166,70 @@ const deleteMerchant = async (req, res) => {
     }
 };
 
-export { registerMerchant, getMerchantByEmail, deleteMerchant, getMeMerchant, getApiKeyForMerchant };
+
+// Fetch Escrow List
+const getMerchantEscrowList = async (req, res) => {
+    try {
+        const merchantId = req.user; // Extract merchant ID from req.user
+        console.log(merchantId);
+        const escrowList = await EscrowAccount.find({ merchant_id: merchantId })
+            .populate("merchant_id")  // Populate merchant details if needed
+            .populate("transaction_id"); // Populate transaction details if needed
+        res.status(200).json(escrowList);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Error fetching escrow list" });
+    }
+};
+
+// Fetch Refund List
+const getMerchantRefundList = async (req, res) => {
+    try {
+        const merchantId = req.user; // Extract merchant ID from req.user
+        const refundList = await Refund.find({ merchant_id: merchantId })
+            .populate("transaction_id"); // Populate transaction details if needed
+        res.status(200).json(refundList);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Error fetching refund list" });
+    }
+};
+
+// Fetch Settlement List
+const getMerchantSettlementList = async (req, res) => {
+    try {
+        const merchantId = req.user; // Extract merchant ID from req.user
+        const settlementList = await Settlement.find({ merchant_id: merchantId })
+            .populate("escrow_account_id")  // Populate escrow details if needed
+            .populate("merchant_id"); // Populate merchant details if needed
+        res.status(200).json(settlementList);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Error fetching settlement list" });
+    }
+};
+
+// Fetch Transaction List
+const getMerchantTransactionList = async (req, res) => {
+    try {
+        const merchantId = req.user; // Extract merchant ID from req.user
+        const transactionList = await Transaction.find({ merchant_id: merchantId })
+        res.status(200).json(transactionList);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Error fetching transaction list" });
+    }
+};
+
+export {
+    getMerchantEscrowList,
+    getMerchantRefundList,
+    getMerchantSettlementList,
+    getMerchantTransactionList,
+    registerMerchant,
+    getMerchantByEmail,
+    deleteMerchant,
+    getMeMerchant,
+    getApiKeyForMerchant
+
+};

@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 // Settlement Schema
 const settlementSchema = new mongoose.Schema({
     escrow_account_id: { type: mongoose.Schema.Types.ObjectId, ref: 'EscrowAccount', required: true }, // Reference to the escrow account
-    merchant_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Merchant', required: true }, // Merchant receiving the funds
+    merchant_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Auth', required: true }, // Merchant receiving the funds
     amount_settled: { type: Number, required: true }, // Amount settled to the merchant
     settlement_status: {
         type: String,

@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 // Escrow Account Schema
 const escrowSchema = new mongoose.Schema({
-    merchant_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Merchant', required: true }, // Link to the merchant
+    merchant_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Auth', required: true }, // Link to the merchant
     transaction_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Transaction', required: true }, // Associated transaction
     amount: { type: Number, required: true }, // Amount in escrow
     status: {

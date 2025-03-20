@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import axiosInstance from "@/api/axiosInstance.ts";
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.tsx';
+import { Label } from '@/components/ui/label.tsx';
+import { Button } from '@/components/ui/button.tsx';
 
 type Merchant = {
     legal_name: string;
@@ -28,7 +28,7 @@ type Merchant = {
     createdAt: string;
 };
 
-const MerchantDashboard = () => {
+const MerchantProfile = () => {
     const [merchantData, setMerchantData] = useState<Merchant | null>(null);
 
     useEffect(() => {
@@ -149,4 +149,4 @@ const MerchantDashboard = () => {
     );
 };
 
-export default MerchantDashboard;
+export default MerchantProfile;

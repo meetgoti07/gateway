@@ -45,7 +45,6 @@ const getSettlementList = async (req, res) => {
     try {
         const settlementList = await Settlement.find()
             .populate("escrow_account_id")  // Populate escrow details if needed
-            .populate("merchant_id"); // Populate merchant details if needed
         res.status(200).json(settlementList);
     } catch (err) {
         console.error(err);

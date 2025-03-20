@@ -2,7 +2,7 @@ import mongoose, {Schema} from "mongoose";
 
 const TransactionSchema = new Schema({
     transaction_id: { type: String, unique: true },
-    merchant_id: { type: Schema.Types.ObjectId, ref: "Merchant", required: true },
+    merchant_id: { type: Schema.Types.ObjectId, ref: "Auth", required: true },
     order_id: { type: String, required: true },
     amount: { type: Number, required: true },
     customer_name: { type: String },

@@ -17,5 +17,6 @@ export const verifyAPIKey = async (req, res, next) => {
     }
 
     req.merchant_id = keyRecord.merchant_id;
+    console.log("✅ API key verified, req.merchant_id set:", req.merchant_id);
     next();
 };
